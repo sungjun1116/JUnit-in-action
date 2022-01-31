@@ -5,18 +5,23 @@
  * courses, books, articles, and the like. Contact us if you are in doubt.
  * We make no guarantees that this code is fit for any purpose.
  * Visit http://www.pragmaticprogrammer.com/titles/utj2 for more book information.
-***/
+ ***/
 package com.example.junit.ch2;
 
 public enum Weight {
-   MustMatch(Integer.MAX_VALUE),
-   VeryImportant(5000),
-   Important(1000),
-   WouldPrefer(100),
-   DontCare(0);
-   
-   private int value;
+    MustMatch(Integer.MAX_VALUE),
+    VeryImportant(5000),
+    Important(1000),
+    WouldPrefer(100),
+    DontCare(0);
 
-   Weight(int value) { this.value = value; }
-   public int getValue() { return value; }
+    private int value;
+
+    Weight(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
 }

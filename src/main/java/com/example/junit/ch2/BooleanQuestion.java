@@ -5,17 +5,17 @@
  * courses, books, articles, and the like. Contact us if you are in doubt.
  * We make no guarantees that this code is fit for any purpose.
  * Visit http://www.pragmaticprogrammer.com/titles/utj2 for more book information.
-***/
+ ***/
 package com.example.junit.ch2;
 
 
 public class BooleanQuestion extends Question {
-   public BooleanQuestion(int id, String text) {
-      super(id, text, new String[] { "No", "Yes" });
-   }
+    public BooleanQuestion(int id, String text) {
+        super(id, text, new String[]{"No", "Yes"});
+    }
 
-   @Override
-   public boolean match(int expected, int actual) {
-      return expected == actual;
-   }
+    @Override
+    public boolean match(int expected, int actual) {
+        return expected == actual;
+    }
 }

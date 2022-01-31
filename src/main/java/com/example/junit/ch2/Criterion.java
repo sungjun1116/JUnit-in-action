@@ -5,22 +5,32 @@
  * courses, books, articles, and the like. Contact us if you are in doubt.
  * We make no guarantees that this code is fit for any purpose.
  * Visit http://www.pragmaticprogrammer.com/titles/utj2 for more book information.
-***/
+ ***/
 package com.example.junit.ch2;
 
 public class Criterion implements Scoreable {
-   private Weight weight;
-   private Answer answer;
-   private int score;
+    private Weight weight;
+    private Answer answer;
+    private int score;
 
-   public Criterion(Answer answer, Weight weight) {
-      this.answer = answer;
-      this.weight = weight;
-   }
-   
-   public Answer getAnswer() { return answer; }
-   public Weight getWeight() { return weight; }
-   
-   public void setScore(int score) { this.score = score; }
-   public int getScore() { return score; }
+    public Criterion(Answer answer, Weight weight) {
+        this.answer = answer;
+        this.weight = weight;
+    }
+
+    public Answer getAnswer() {
+        return answer;
+    }
+
+    public Weight getWeight() {
+        return weight;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getScore() {
+        return score;
+    }
 }

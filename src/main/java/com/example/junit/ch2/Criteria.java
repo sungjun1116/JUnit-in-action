@@ -5,10 +5,8 @@
  * courses, books, articles, and the like. Contact us if you are in doubt.
  * We make no guarantees that this code is fit for any purpose.
  * Visit http://www.pragmaticprogrammer.com/titles/utj2 for more book information.
-***/
+ ***/
 package com.example.junit.ch2;
-
-import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,23 +16,23 @@ import java.util.List;
 public class Criteria implements Iterable<Criterion> {
 
 
-   private List<Criterion> criteria = new ArrayList<>();
+    private List<Criterion> criteria = new ArrayList<>();
 
-   public void add(Criterion criterion) {
-      criteria.add(criterion);
-   }
+    public void add(Criterion criterion) {
+        criteria.add(criterion);
+    }
 
-   @Override
-   public Iterator<Criterion> iterator() {
-      return criteria.iterator();
-   }
-   
-   public int arithmeticMean() {
-      return 0;
-   }
+    @Override
+    public Iterator<Criterion> iterator() {
+        return criteria.iterator();
+    }
 
-   public double geometricMean(int[] numbers) {
-      int totalProduct = Arrays.stream(numbers).reduce(1, (product, number) -> product * number);
-      return Math.pow(totalProduct, 1.0 / numbers.length);
-   }
+    public int arithmeticMean() {
+        return 0;
+    }
+
+    public double geometricMean(int[] numbers) {
+        int totalProduct = Arrays.stream(numbers).reduce(1, (product, number) -> product * number);
+        return Math.pow(totalProduct, 1.0 / numbers.length);
+    }
 }

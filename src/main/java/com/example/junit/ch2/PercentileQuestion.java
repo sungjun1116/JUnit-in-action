@@ -5,16 +5,16 @@
  * courses, books, articles, and the like. Contact us if you are in doubt.
  * We make no guarantees that this code is fit for any purpose.
  * Visit http://www.pragmaticprogrammer.com/titles/utj2 for more book information.
-***/
+ ***/
 package com.example.junit.ch2;
 
 public class PercentileQuestion extends Question {
-   public PercentileQuestion(int id, String text, String[] answerChoices) {
-      super(id, text, answerChoices);
-   }
+    public PercentileQuestion(int id, String text, String[] answerChoices) {
+        super(id, text, answerChoices);
+    }
 
-   @Override
-   public boolean match(int expected, int actual) {
-      return expected <= actual;
-   }
+    @Override
+    public boolean match(int expected, int actual) {
+        return expected <= actual;
+    }
 }

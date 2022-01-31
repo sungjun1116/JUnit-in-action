@@ -5,26 +5,26 @@
  * courses, books, articles, and the like. Contact us if you are in doubt.
  * We make no guarantees that this code is fit for any purpose.
  * Visit http://www.pragmaticprogrammer.com/titles/utj2 for more book information.
-***/
+ ***/
 package com.example.junit.ch2;
 
 import java.util.*;
 import java.util.stream.*;
 
 public class Person {
-   private List<Question> characteristics = new ArrayList<>();
+    private List<Question> characteristics = new ArrayList<>();
 
-   public void add(Question characteristic) {
-      characteristics.add(characteristic);
-   }
+    public void add(Question characteristic) {
+        characteristics.add(characteristic);
+    }
 
-   public List<Question> getCharacteristics() {
-      return characteristics;
-   }
+    public List<Question> getCharacteristics() {
+        return characteristics;
+    }
 
-   public List<Question> withCharacteristic(String questionPattern) {
-      return characteristics.stream().filter(c -> c.getText().endsWith(questionPattern)).collect(Collectors.toList());
-   }
+    public List<Question> withCharacteristic(String questionPattern) {
+        return characteristics.stream().filter(c -> c.getText().endsWith(questionPattern)).collect(Collectors.toList());
+    }
 
 }
 
