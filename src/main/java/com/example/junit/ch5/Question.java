@@ -1,5 +1,6 @@
 package com.example.junit.ch5;
 
+import com.example.junit.ch2.Answer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

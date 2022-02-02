@@ -1,7 +1,6 @@
 package com.example.junit.ch2;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -10,23 +9,30 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ProfileTest {
 
     private Profile profile;
-
-    private BooleanQuestion question;
-
     private Criteria criteria;
+    private Answer answerThereIsRelocation;
+    private Answer answerThereIsNotRelocation;
+    private Answer answerDoseNotReimburseTuition;
+    private Answer answerReimburseTuition;
+    private BooleanQuestion questionIsThereRelocation;
+    private BooleanQuestion questionReimburseTuition;
 
     @BeforeEach
-    public void create() {
-        profile = new Profile("Bull Hockey, Inc.");
-        question = new BooleanQuestion(1, "Got bonuses?");
+    public void setup() {
+        profile = new Profile();
         criteria = new Criteria();
+        questionIsThereRelocation = new BooleanQuestion(1, "Relocation package?");
+        questionReimburseTuition = new BooleanQuestion(1, "Reimburse tuition?");
+        answerThereIsRelocation = new Answer(questionIsThereRelocation, Bool.TRUE);
+        answerThereIsNotRelocation = new Answer(questionIsThereRelocation, Bool.FALSE);
+        answerReimburseTuition = new Answer(questionReimburseTuition, Bool.TRUE);
+        answerDoseNotReimburseTuition = new Answer(questionReimburseTuition, Bool.FALSE);
     }
 
     @Test
-    @DisplayName("Criteria 인스턴스가 Criteria 객체를 포함하지 않을 때")
-    void test1() {
+    void matchAnswersFalseWhenCriteriaIsEmpty() {
         // given
-        profile.add(new Answer(question, Bool.FALSE));
+        profile.add(answerThereIsNotRelocation);
 
         // when
         boolean matches = profile.matches(criteria);
@@ -36,11 +42,10 @@ class ProfileTest {
     }
 
     @Test
-    @DisplayName("match 변수가 false이고 criterion.getWeight()가 Weight.MustMatch여서 kill 변수가 true일 때")
     void matchAnswersFalseWhenMustMatchCriteriaNotMet() {
         // given
-        profile.add(new Answer(question, Bool.FALSE));
-        criteria.add(new Criterion(new Answer(question, Bool.TRUE), Weight.MustMatch));
+        profile.add(answerThereIsNotRelocation);
+        criteria.add(new Criterion(new Answer(questionIsThereRelocation, Bool.TRUE), Weight.MustMatch));
 
         // when
         boolean matches = profile.matches(criteria);
@@ -50,11 +55,10 @@ class ProfileTest {
     }
 
     @Test
-    @DisplayName("criterion.getWeight()의 반환값이 Weight.DontCare여서 match 변수가 true일 때")
     void matchAnswersTrueForAnyDontCareCriteria() {
         // given
-        profile.add(new Answer(question, Bool.FALSE));
-        criteria.add(new Criterion(new Answer(question, Bool.TRUE), Weight.DontCare));
+        profile.add(answerThereIsNotRelocation);
+        criteria.add(new Criterion(answerThereIsRelocation, Weight.DontCare));
 
         // when
         boolean matches = profile.matches(criteria);
@@ -63,6 +67,46 @@ class ProfileTest {
         assertTrue(matches);
     }
 
+    @Test
+    void matchesWhenProfileContainsMatchingAnswer() {
+        // given
+        profile.add(answerThereIsRelocation);
+        criteria.add(new Criterion(answerThereIsRelocation, Weight.Important));
 
+        // when
+        boolean result = profile.matches(criteria);
+
+        // then
+        assertTrue(result);
+    }
+
+    @Test
+    void doesNotMatchWhenNoMatchingAnswer() {
+        // given
+        profile.add(answerThereIsNotRelocation);
+        criteria.add(new Criterion(answerThereIsRelocation, Weight.Important));
+
+        // when
+        boolean result = profile.matches(criteria);
+
+        // then
+        assertFalse(result);
+    }
+
+    @Test
+    void matchAnswersTrueWhenAnyOfMultipleCriteriaMatch() {
+        // given
+        profile.add(answerThereIsRelocation);
+        profile.add(answerDoseNotReimburseTuition);
+        criteria.add(new Criterion(answerThereIsRelocation, Weight.Important));
+        criteria.add(new Criterion(answerReimburseTuition, Weight.Important));
+
+        // when
+        boolean matches = profile.matches(criteria);
+
+        // then
+        assertTrue(matches);
+    }
 
 }
+
