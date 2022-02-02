@@ -1,5 +1,7 @@
 package com.example.junit.ch2;
 
+import com.example.junit.ch9.AnswerCollection;
+import com.example.junit.ch9.MatchSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ProfileTest {
 
-    private Profile profile;
     private Criteria criteria;
+    private AnswerCollection answers;
     private Answer answerThereIsRelocation;
     private Answer answerThereIsNotRelocation;
     private Answer answerDoseNotReimburseTuition;
@@ -19,8 +21,8 @@ class ProfileTest {
 
     @BeforeEach
     public void setup() {
-        profile = new Profile();
         criteria = new Criteria();
+        answers = new AnswerCollection();
         questionIsThereRelocation = new BooleanQuestion(1, "Relocation package?");
         questionReimburseTuition = new BooleanQuestion(1, "Reimburse tuition?");
         answerThereIsRelocation = new Answer(questionIsThereRelocation, Bool.TRUE);
@@ -29,13 +31,21 @@ class ProfileTest {
         answerDoseNotReimburseTuition = new Answer(questionReimburseTuition, Bool.FALSE);
     }
 
+    private void add(Answer answer) {
+        answers.add(answer);
+    }
+
+    private MatchSet createMatchSet() {
+        return new MatchSet(answers, criteria);
+    }
+
     @Test
     void matchAnswersFalseWhenCriteriaIsEmpty() {
         // given
-        profile.add(answerThereIsNotRelocation);
+        add(answerThereIsNotRelocation);
 
         // when
-        boolean matches = profile.matches(criteria);
+        boolean matches = createMatchSet().matches();
 
         // then
         assertFalse(matches);
@@ -44,11 +54,11 @@ class ProfileTest {
     @Test
     void matchAnswersFalseWhenMustMatchCriteriaNotMet() {
         // given
-        profile.add(answerThereIsNotRelocation);
+        add(answerThereIsNotRelocation);
         criteria.add(new Criterion(new Answer(questionIsThereRelocation, Bool.TRUE), Weight.MustMatch));
 
         // when
-        boolean matches = profile.matches(criteria);
+        boolean matches = createMatchSet().matches();
 
         // then
         assertFalse(matches);
@@ -57,11 +67,11 @@ class ProfileTest {
     @Test
     void matchAnswersTrueForAnyDontCareCriteria() {
         // given
-        profile.add(answerThereIsNotRelocation);
+        add(answerThereIsNotRelocation);
         criteria.add(new Criterion(answerThereIsRelocation, Weight.DontCare));
 
         // when
-        boolean matches = profile.matches(criteria);
+        boolean matches = createMatchSet().matches();
 
         // then
         assertTrue(matches);
@@ -70,11 +80,11 @@ class ProfileTest {
     @Test
     void matchesWhenProfileContainsMatchingAnswer() {
         // given
-        profile.add(answerThereIsRelocation);
+        add(answerThereIsRelocation);
         criteria.add(new Criterion(answerThereIsRelocation, Weight.Important));
 
         // when
-        boolean result = profile.matches(criteria);
+        boolean result = createMatchSet().matches();
 
         // then
         assertTrue(result);
@@ -83,11 +93,11 @@ class ProfileTest {
     @Test
     void doesNotMatchWhenNoMatchingAnswer() {
         // given
-        profile.add(answerThereIsNotRelocation);
+        add(answerThereIsNotRelocation);
         criteria.add(new Criterion(answerThereIsRelocation, Weight.Important));
 
         // when
-        boolean result = profile.matches(criteria);
+        boolean result = createMatchSet().matches();
 
         // then
         assertFalse(result);
@@ -96,17 +106,16 @@ class ProfileTest {
     @Test
     void matchAnswersTrueWhenAnyOfMultipleCriteriaMatch() {
         // given
-        profile.add(answerThereIsRelocation);
-        profile.add(answerDoseNotReimburseTuition);
+        add(answerThereIsRelocation);
+        add(answerDoseNotReimburseTuition);
         criteria.add(new Criterion(answerThereIsRelocation, Weight.Important));
         criteria.add(new Criterion(answerReimburseTuition, Weight.Important));
 
         // when
-        boolean matches = profile.matches(criteria);
+        boolean matches = createMatchSet().matches();
 
         // then
         assertTrue(matches);
     }
-
 }
 

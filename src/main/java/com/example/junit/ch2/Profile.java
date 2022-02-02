@@ -8,17 +8,14 @@
  ***/
 package com.example.junit.ch2;
 
+import com.example.junit.ch9.AnswerCollection;
 import com.example.junit.ch9.MatchSet;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @NoArgsConstructor
 public class Profile {
-    private Map<String, Answer> answers = new HashMap<>();
-    private int score;
+    private AnswerCollection answers = new AnswerCollection();
     @Getter
     private String name;
 
@@ -27,12 +24,15 @@ public class Profile {
     }
 
     public void add(Answer answer) {
-        answers.put(answer.getQuestionText(), answer);
+        answers.add(answer);
     }
 
-    public boolean matches(Criteria criteria) {
-        MatchSet matchSet = new MatchSet(answers, criteria);
-        score = matchSet.getScore();
-        return matchSet.matches();
+    public MatchSet getMatchSet(Criteria criteria) {
+        return new MatchSet(answers, criteria);
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
