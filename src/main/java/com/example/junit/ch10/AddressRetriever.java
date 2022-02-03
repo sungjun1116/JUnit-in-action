@@ -1,20 +1,20 @@
 package com.example.junit.ch10;
 
 import com.example.junit.ch10.util.Http;
-import lombok.AllArgsConstructor;
+import com.example.junit.ch10.util.HttpImpl;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 
-@AllArgsConstructor
 public class AddressRetriever {
 
-    private Http http;
+    private Http http = new HttpImpl();
 
     public Address retrieve(double latitude, double longitude) throws IOException, ParseException {
-        String parms = String.format("lat=%.6flon=%.6f", latitude, longitude);
+        String parms = String.format("lat=%.6f&lon=%.6f", latitude, longitude);
+        System.out.println(parms);
         String response = http.get("http://open.mapquestapi.com/nominatim/v1/reverse?format=json&" + parms);
 
         JSONObject obj = (JSONObject) new JSONParser().parse(response);
@@ -30,6 +30,6 @@ public class AddressRetriever {
         String city = (String) address.get("city");
         String state = (String) address.get("state");
         String zip = (String) address.get("postcode");
-        return new Address(houseNumber, road, city, state, zip);
+        return new Address( road, city, state, zip, houseNumber);
     }
 }
