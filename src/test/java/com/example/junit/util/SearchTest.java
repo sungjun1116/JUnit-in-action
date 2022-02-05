@@ -32,7 +32,6 @@ public class SearchTest {
         search.execute();
         assertFalse(search.errored());
         List<Match> matches = search.getMatches();
-        assertThat(matches).isNotNull();
         assertTrue(matches.size() >= 1);
         Match match = matches.get(0);
         assertThat(match.searchString).isEqualTo("practical joke");
