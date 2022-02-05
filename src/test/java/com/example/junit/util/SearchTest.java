@@ -7,10 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.List;
 import java.util.logging.Level;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.example.junit.util.ContainsMatches.containsMatches;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -31,11 +31,11 @@ public class SearchTest {
         search.setSurroundingCharacterCount(10);
         search.execute();
         assertFalse(search.errored());
-        List<Match> matches = search.getMatches();
-        assertTrue(matches.size() >= 1);
-        Match match = matches.get(0);
-        assertThat(match.searchString).isEqualTo("practical joke");
-        assertThat(match.surroundingContext).isEqualTo("or a vast practical joke, though t");
+        assertThat(search.getMatches(), containsMatches(new Match[]{
+                new Match("1",
+                        "practical joke",
+                        "or a vast practical joke, though t")
+        }));
         stream.close();
 
         // negative
@@ -44,7 +44,7 @@ public class SearchTest {
         InputStream inputStream = connection.getInputStream();
         search = new Search(inputStream, "smelt", "http://bit.ly/15sYPA7");
         search.execute();
-        assertThat(search.getMatches().size()).isZero();
+        assertTrue(search.getMatches().isEmpty());
         stream.close();
     }
 }
