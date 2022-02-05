@@ -31,7 +31,7 @@ class SearchTest {
     }
 
     @Test
-    void testSearch() throws IOException {
+    void testSearch() {
         stream = streamOn("There are certain queer times and occasions "
                 + "in this strange mixed affair we call life when a man "
                 + "takes this whole universe for a vast practical joke, "
@@ -41,7 +41,9 @@ class SearchTest {
         Search search = new Search(stream, "practical joke", A_TITLE);
         Search.LOGGER.setLevel(Level.OFF);
         search.setSurroundingCharacterCount(10);
+
         search.execute();
+
         Assertions.assertFalse(search.errored());
         assertThat(search.getMatches(), containsMatches(new Match[]{
                 new Match(A_TITLE,
@@ -55,7 +57,9 @@ class SearchTest {
         URLConnection connection = new URL("http://bit.ly/15sYPA7").openConnection();
         stream = connection.getInputStream();
         Search search = new Search(stream, "smelt", A_TITLE);
+
         search.execute();
+
         Assertions.assertTrue(search.getMatches().isEmpty());
     }
 
