@@ -2,7 +2,6 @@ package com.example.junit.util;
 
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +12,8 @@ import java.util.logging.Level;
 
 import static com.example.junit.util.ContainsMatches.containsMatches;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SearchTest {
     private static final String A_TITLE = "1";
@@ -42,7 +43,7 @@ class SearchTest {
         search.execute();
 
         // then
-        Assertions.assertFalse(search.errored());
+        assertFalse(search.errored());
         assertThat(search.getMatches(), containsMatches(new Match[]{
                 new Match(A_TITLE,
                         "search term",
@@ -51,7 +52,7 @@ class SearchTest {
     }
 
     @Test
-    void noMatchesReturnedWhenSearchStringNotInContent() throws IOException {
+    void noMatchesReturnedWhenSearchStringNotInContent() {
         // given
         stream = streamOn("any text");
         Search search = new Search(stream, "text that doesn't match", A_TITLE);
@@ -60,10 +61,45 @@ class SearchTest {
         search.execute();
 
         // then
-        Assertions.assertTrue(search.getMatches().isEmpty());
+        assertTrue(search.getMatches().isEmpty());
+    }
+
+    @Test
+    void returnsErroredWhenUnableToReadStream() {
+        // given
+        stream = createStreamThrowingErrorWhenRead();
+        Search search = new Search(stream, "", "");
+
+        // when
+        search.execute();
+
+        // then
+        assertTrue(search.errored());
+    }
+
+    @Test
+    void erroredReturnsFalseWhenReadSucceeds() {
+        // given
+        stream = streamOn("");
+        Search search = new Search(stream, "", "");
+
+        // when
+        search.execute();
+
+        // then
+        assertFalse(search.errored());
     }
 
     private InputStream streamOn(String pageContent) {
         return new ByteArrayInputStream(pageContent.getBytes());
+    }
+
+    private InputStream createStreamThrowingErrorWhenRead() {
+        return new InputStream() {
+            @Override
+            public int read() throws IOException {
+                throw new IOException();
+            }
+        };
     }
 }
