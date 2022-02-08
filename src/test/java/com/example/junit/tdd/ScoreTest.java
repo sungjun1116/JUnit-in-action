@@ -53,7 +53,9 @@ class ScoreTest {
     @Test
     void scoreIsWeightValueWhenThereAreMatches() {
         profile.add(answerThereIsRelocation);
+        profile.add(answerDoesNotReimburseTuition);
         criteria.add(new Criterion(answerThereIsRelocation, Weight.Important));
+        criteria.add(new Criterion(answerReimburseTuition, Weight.Important));
 
         ProfileMatch match = profile.match(criteria);
 

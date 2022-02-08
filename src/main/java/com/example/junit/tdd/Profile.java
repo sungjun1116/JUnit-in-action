@@ -5,12 +5,9 @@ import com.example.junit.ch2.Criteria;
 import com.example.junit.ch2.Criterion;
 import com.example.junit.ch2.Weight;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Profile {
-    private Map<String, Answer> answers = new HashMap<>();
-    boolean matches = false;
+    private AnswerCollection answers = new AnswerCollection();
+    boolean matches;
 
     public boolean matches(Criteria criteria) {
         for (Criterion criterion : criteria) {
@@ -25,19 +22,14 @@ public class Profile {
 
     public boolean matches(Criterion criterion) {
         return criterion.getWeight() == Weight.DontCare ||
-                criterion.getAnswer().match(getMatchingProfileAnswer(criterion));
+                criterion.matches(answers.getMatchingAnswer(criterion));
     }
 
     public void add(Answer answer) {
-        answers.put(answer.getQuestionText(), answer);
+        answers.add(answer);
     }
 
     public ProfileMatch match(Criteria criteria) {
         return new ProfileMatch(answers, criteria);
     }
-
-    private Answer getMatchingProfileAnswer(Criterion criterion) {
-        return answers.get(criterion.getAnswer().getQuestionText());
-    }
-
 }
