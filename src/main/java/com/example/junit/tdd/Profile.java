@@ -32,6 +32,10 @@ public class Profile {
         answers.put(answer.getQuestionText(), answer);
     }
 
+    public ProfileMatch match(Criteria criteria) {
+        return new ProfileMatch(answers, criteria);
+    }
+
     private Answer getMatchingProfileAnswer(Criterion criterion) {
         return answers.get(criterion.getAnswer().getQuestionText());
     }

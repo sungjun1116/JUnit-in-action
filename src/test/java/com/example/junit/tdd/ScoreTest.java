@@ -4,7 +4,11 @@ import com.example.junit.ch2.Answer;
 import com.example.junit.ch2.Bool;
 import com.example.junit.ch2.BooleanQuestion;
 import com.example.junit.ch2.Criteria;
+import com.example.junit.ch2.Criterion;
+import com.example.junit.ch2.Weight;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class ScoreTest {
 
@@ -37,12 +41,22 @@ class ScoreTest {
         criteria = new Criteria();
     }
 
-    // @Test
-    // void scoreIsZeroWhenThereAreNoMatches() {
-    //     criteria.add(new Criterion(answerThereIsRelocation, Weight.Important));
-    //
-    //     ProfileMatch match = profile.match(criteria);
-    //
-    //     Assertions.assertThat(match.getScore()).isZero();
-    // }
+    @Test
+    void scoreIsZeroWhenThereAreNoMatches() {
+        criteria.add(new Criterion(answerThereIsRelocation, Weight.Important));
+
+        ProfileMatch match = profile.match(criteria);
+
+        Assertions.assertThat(match.getScore()).isZero();
+    }
+
+    @Test
+    void scoreIsWeightValueWhenThereAreMatches() {
+        profile.add(answerThereIsRelocation);
+        criteria.add(new Criterion(answerThereIsRelocation, Weight.Important));
+
+        ProfileMatch match = profile.match(criteria);
+
+        Assertions.assertThat(match.getScore()).isEqualTo(1000);
+    }
 }
