@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 public class ProfileMatcher {
@@ -17,12 +18,17 @@ public class ProfileMatcher {
         profiles.put(profile.getId(), profile);
     }
 
-    public void findMatchingProfiles(Criteria criteria, MatchListener listener) {
-        ExecutorService executor = Executors.newFixedThreadPool(DEFAULT_POOL_SIZE);
+    private ExecutorService executor = Executors.newFixedThreadPool(DEFAULT_POOL_SIZE);
+
+    public ExecutorService getExecutor() {
+        return executor;
+    }
+
+    public void findMatchingProfiles(Criteria criteria, MatchListener listener, List<MatchSet> matchSets, BiConsumer<MatchListener, MatchSet> processFunction) {
 
         for (MatchSet set : collectMatchSets(criteria)) {
             Runnable runnable = () -> {
-                process(listener, set);
+                processFunction.accept(listener, set);
             };
             executor.execute(runnable);
         }

@@ -10,9 +10,13 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.mock;
@@ -86,6 +90,24 @@ class ProfileMatcherTest {
         matcher.process(listener, set);
 
         verify(listener, never()).foundMatch(nonMatchingProfile, set);
+    }
+
+    @Test
+    void gathersMatchingProfiles() {
+        Set<String> processedSets = Collections.synchronizedSet(new HashSet<>());
+        BiConsumer<MatchListener, MatchSet> processFunction = (listener, set) -> {
+            processedSets.add(set.getProfileId());
+        };
+        List<MatchSet> matchSets = createMatchSets(100);
+
+    }
+
+    private List<MatchSet> createMatchSets(int count) {
+        List<MatchSet> sets = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            sets.add(new MatchSet(String.valueOf(i), null, null));
+        }
+        return sets;
     }
 
 
