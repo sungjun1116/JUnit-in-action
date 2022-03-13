@@ -16,26 +16,26 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 
-class QuestionControllerTest {
+class QuestionRepositoryTest {
 
-    private QuestionController controller;
+    private QuestionRepository repository;
 
     @BeforeEach
     public void create() {
-        controller = new QuestionController();
-        controller.deleteAll();
+        repository = new QuestionRepository();
+        repository.deleteAll();
     }
 
     @AfterEach
     public void cleanup() {
-        controller.deleteAll();
+        repository.deleteAll();
     }
 
     @Test
     void findsPersistedQuestionById() {
-        int id = controller.addBooleanQuestion("question text");
+        int id = repository.addBooleanQuestion("question text");
 
-        Question question = controller.find(id);
+        Question question = repository.find(id);
 
         assertThat(question.getText()).isEqualTo("question text");
     }
@@ -43,21 +43,21 @@ class QuestionControllerTest {
     @Test
     void questionAnswersDateAdded() {
         Instant now = new Date().toInstant();
-        controller.setClock(Clock.fixed(now, ZoneId.of("America/Denver")));
-        int id = controller.addBooleanQuestion("text");
+        repository.setClock(Clock.fixed(now, ZoneId.of("America/Denver")));
+        int id = repository.addBooleanQuestion("text");
 
-        Question question = controller.find(id);
+        Question question = repository.find(id);
 
         assertThat(question.getCreateTimestamp()).isEqualTo(equalTo(now));
     }
 
     @Test
     void answersMultiplePersistedQuestions() {
-        controller.addBooleanQuestion("q1");
-        controller.addBooleanQuestion("q2");
-        controller.addPercentileQuestion("q3", new String[]{"a1", "a2"});
+        repository.addBooleanQuestion("q1");
+        repository.addBooleanQuestion("q2");
+        repository.addPercentileQuestion("q3", new String[]{"a1", "a2"});
 
-        List<Question> questions = controller.getAll();
+        List<Question> questions = repository.getAll();
 
         assertThat(questions.stream()
                 .map(Question::getText)
@@ -67,11 +67,11 @@ class QuestionControllerTest {
 
     @Test
     void findsMatchingEntries() {
-        controller.addBooleanQuestion("alpha 1");
-        controller.addBooleanQuestion("alpha 2");
-        controller.addBooleanQuestion("beta 1");
+        repository.addBooleanQuestion("alpha 1");
+        repository.addBooleanQuestion("alpha 2");
+        repository.addBooleanQuestion("beta 1");
 
-        List<Question> questions = controller.findWithMatchingText("alpha");
+        List<Question> questions = repository.findWithMatchingText("alpha");
 
         assertThat(questions.stream()
                 .map(Question::getText)

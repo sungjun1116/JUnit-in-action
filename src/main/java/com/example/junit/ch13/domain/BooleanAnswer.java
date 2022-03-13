@@ -8,11 +8,11 @@
 ***/
 package com.example.junit.ch13.domain;
 
-class BooleanAnswer {
+public class BooleanAnswer {
    private int questionId;
    private boolean value;
 
-   BooleanAnswer(int questionId, boolean value) {
+   public BooleanAnswer(int questionId, boolean value) {
       this.questionId = questionId;
       this.value = value;
    }

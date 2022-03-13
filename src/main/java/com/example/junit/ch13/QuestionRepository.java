@@ -4,6 +4,7 @@ import com.example.junit.ch13.domain.BooleanQuestion;
 import com.example.junit.ch13.domain.PercentileQuestion;
 import com.example.junit.ch13.domain.Persistable;
 import com.example.junit.ch13.domain.Question;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -13,7 +14,8 @@ import java.time.Clock;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class QuestionController {
+@Repository
+public class QuestionRepository {
     private Clock clock = Clock.systemUTC();
     private static EntityManagerFactory getEntityManagerFactory() {
         return Persistence.createEntityManagerFactory("postgres-ds");

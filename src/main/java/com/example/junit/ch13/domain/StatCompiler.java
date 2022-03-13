@@ -8,7 +8,7 @@
 ***/
 package com.example.junit.ch13.domain;
 
-import com.example.junit.ch13.QuestionController;
+import com.example.junit.ch13.QuestionRepository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class StatCompiler {
-   private QuestionController controller = new QuestionController();
+   private QuestionRepository controller = new QuestionRepository();
    
    public Map<Integer,String> questionText(List<BooleanAnswer> answers) {
       Map<Integer,String> questions = new HashMap<>();
